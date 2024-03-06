@@ -1,15 +1,26 @@
+import Image from 'next/image';
+
 interface ButtonProps {
     onClick: () => void;
-    style?: string; 
     name: string; 
-}
+    style?: string; 
+    image?: string;
+};
 
-const Button = ({ onClick, style, name }: ButtonProps) => {
+const Button = ({ onClick, name, style, image}: ButtonProps) => {
     return (
-       <button onClick={onClick} className={style}>
-         {name}
+       <button className={style} onClick={onClick}>
+            {
+                image && <Image 
+                            src={image}
+                            width={30}
+                            height={30}
+                            alt={name}
+                        />
+            }
+            {name}
        </button>
     );
-   };
+};
    
-   export default Button;
+export default Button;

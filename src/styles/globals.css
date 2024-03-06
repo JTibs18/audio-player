@@ -31,3 +31,9 @@ body {
     text-wrap: balance;
   }
 }
+
+@layer components {
+  .button-template {
+    @apply flex rounded-full w-28 h-8 items-center justify-center gap-2;
+  }
+}

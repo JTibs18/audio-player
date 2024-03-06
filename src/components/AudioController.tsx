@@ -3,7 +3,7 @@ import Button from './Button';
 
 interface AudioControllerProps {
     audioSrc: string;
-}
+};
 
 const AudioController = ({audioSrc}: AudioControllerProps) =>{
     const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
@@ -29,9 +29,18 @@ const AudioController = ({audioSrc}: AudioControllerProps) =>{
         setIsPlaying(!isPlaying); 
     }; 
 
+    const stopPlay = () => {
+        setIsPlaying(false); 
+
+        if (audio){
+            audio.currentTime = 0;
+        };
+    };
+
     return (
-        <div>
-            <Button onClick={togglePlay} name={isPlaying ? 'Pause' : 'Play'} /> 
+        <div className='flex gap-4'>
+            <Button onClick={togglePlay} name={isPlaying ? 'Pause' : 'Play'} image={isPlaying ? '/images/pause.jpg' : '/images/play.jpg'} style={isPlaying ? 'button-template bg-green-600' : 'button-template bg-green-600'}/> 
+            <Button onClick={stopPlay} name={"Stop"} image={'/images/stop.jpg'} style="button-template bg-red-600"/> 
         </div>
     );
 };

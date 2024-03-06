@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import FileInput from "@components/FileInput"
+import FileInput from "@components/FileInput";
 import AudioController from "@components/AudioController";
 
 const Home = () => {
@@ -14,8 +14,8 @@ const Home = () => {
     return (
         <section>
             <h1> Jess Audio Player </h1>
-            <AudioController audioSrc={audioSrc} />
             <FileInput onFileSelected={handleFileSelected} />
+            <AudioController audioSrc={audioSrc} />
         </section>
     );
 };
