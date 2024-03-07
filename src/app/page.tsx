@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import FileInput from "@components/FileInput";
-import AudioController from "@components/AudioController";
+import WaveSurfer from "@components/WaveSurfer";
 
 const Home = () => {
     const [audioSrc, setAudioSrc] = useState<string>('');
@@ -15,7 +15,7 @@ const Home = () => {
         <section>
             <h1> Jess Audio Player </h1>
             <FileInput onFileSelected={handleFileSelected} />
-            <AudioController audioSrc={audioSrc} />
+            <WaveSurfer audioUrl={audioSrc} />
         </section>
     );
 };

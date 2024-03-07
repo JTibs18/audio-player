@@ -1,45 +1,36 @@
-import { useState, useEffect } from 'react'; 
+import { useEffect, useState } from 'react'; 
 import Button from './Button';
 
 interface AudioControllerProps {
-    audioSrc: string;
+    waveSurfer: any; 
+    waveFormPlayPause: () => void; 
+    waveFormStop: () => void; 
 };
 
-const AudioController = ({audioSrc}: AudioControllerProps) =>{
-    const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+const AudioController = ({waveSurfer, waveFormPlayPause, waveFormStop}: AudioControllerProps) =>{
     const [isPlaying, setIsPlaying] = useState(false); 
-
-    useEffect(() => {
-        if (audioSrc) {
-            const newAudio = new Audio(audioSrc); 
-            newAudio.onended = () => setIsPlaying(false); 
-            setAudio(newAudio); 
-        }
-    }, [audioSrc]); 
-
-    useEffect(() => {
-        if (audio && isPlaying) {
-            audio.play();
-        } else if (audio) {
-            audio.pause(); 
-        }
-    }, [audio, isPlaying]); 
 
     const togglePlay = () => {
         setIsPlaying(!isPlaying); 
+        waveFormPlayPause();
     }; 
+
+    useEffect (() => {
+        if (waveSurfer){
+            waveSurfer.on('finish', () => {
+                setIsPlaying(false);
+            });
+        }
+    }, [waveSurfer]);
 
     const stopPlay = () => {
         setIsPlaying(false); 
-
-        if (audio){
-            audio.currentTime = 0;
-        };
+        waveFormStop(); 
     };
 
     return (
         <div className='flex gap-4'>
-            <Button onClick={togglePlay} name={isPlaying ? 'Pause' : 'Play'} image={isPlaying ? '/images/pause.jpg' : '/images/play.jpg'} style={isPlaying ? 'button-template bg-green-600' : 'button-template bg-green-600'}/> 
+            <Button onClick={togglePlay} name={isPlaying ? 'Pause' : 'Play'} image={isPlaying ? '/images/pause.jpg' : '/images/play.jpg'} style='button-template bg-green-600'/> 
             <Button onClick={stopPlay} name={"Stop"} image={'/images/stop.jpg'} style="button-template bg-red-600"/> 
         </div>
     );
