@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'; 
 import Button from './Button';
+import WaveSurfer from 'wavesurfer.js'; 
 
 interface AudioControllerProps {
     waveSurfer: WaveSurfer | null; 
@@ -31,8 +32,8 @@ const AudioController = ({ waveSurfer, waveFormPlayPause, waveFormStop }: AudioC
 
     return (
         <div className='flex gap-4'>
-            <Button onClick={togglePlay} name={isPlaying ? 'Pause' : 'Play'} image={isPlaying ? '/images/pause.jpg' : '/images/play.jpg'} style='button-template bg-green-600'/> 
-            <Button onClick={stopPlay} name={"Stop"} image={'/images/stop.jpg'} style="button-template bg-red-600"/> 
+            <Button onClick={ togglePlay } name={ isPlaying ? 'Pause' : 'Play' } image={ isPlaying ? '/images/pause.jpg' : '/images/play.jpg' } style='button-template bg-green-600'/> 
+            <Button onClick={ stopPlay } name="Stop" image='/images/stop.jpg' style="button-template bg-red-600"/> 
         </div>
     );
 };
