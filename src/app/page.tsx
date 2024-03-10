@@ -9,7 +9,7 @@ const Home = () => {
   
     const handleFileSelected = (fileUrl: string) => {
         setAudioSrc(fileUrl);
-      };
+    };
 
     return (
         <section>
