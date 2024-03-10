@@ -18,8 +18,10 @@ const AudioController = ({ waveSurfer, waveFormPlayPause, waveFormStop }: AudioC
     }, [waveSurfer]);
 
     const togglePlay = () => {
-        setIsPlaying(!isPlaying); 
-        waveFormPlayPause();
+        if (waveSurfer){
+            setIsPlaying(!isPlaying); 
+            waveFormPlayPause();
+        };
     };
 
     const stopPlay = () => {
