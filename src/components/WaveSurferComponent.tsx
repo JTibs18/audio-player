@@ -3,7 +3,6 @@ import WavesurferPlayer from '@wavesurfer/react';
 import AudioController from "@components/AudioController";
 import RegionPlugin, { Region } from "wavesurfer.js/dist/plugins/regions.esm.js";
 import WaveSurfer from 'wavesurfer.js'; 
-import { convertAudioBufferToBlob, createNewAudioBuffer } from '@utils/utilityFunctions';
 
 interface WaveSurferComponentProps {
   audioUrl: string; 
@@ -56,16 +55,8 @@ const WaveSurferComponent = ({ audioUrl }: WaveSurferComponentProps) => {
   };
 
   const onCut = () => {
-    if (waveSurfer?.getDecodedData() && selectedRegion){
-      const originalAudioBuffer = waveSurfer.getDecodedData();
-      
-      if (originalAudioBuffer) {
-        const newAudioBuffer = createNewAudioBuffer(originalAudioBuffer, selectedRegion.start, selectedRegion.end); 
-        waveSurfer.loadBlob(convertAudioBufferToBlob(newAudioBuffer)); 
-      }
-      waveSurferRegions?.destroy();
-      setSelectedRegion(null); 
-    };
+    waveSurferRegions?.destroy();
+    setSelectedRegion(null); 
   };
 
   return (
@@ -78,7 +69,7 @@ const WaveSurferComponent = ({ audioUrl }: WaveSurferComponentProps) => {
         onReady={ onReady }
       />
       <div className='flex gap-4'>
-        <AudioController waveFormPlayPause={ onPlayPause } waveFormStop={ onStop } waveSurfer={ waveSurfer } cutWave={ onCut }/>
+        <AudioController waveFormPlayPause={ onPlayPause } waveFormStop={ onStop } waveSurfer={ waveSurfer } cutWave={ onCut } selectedRegion={selectedRegion}/>
       </div>
     </div>
   );
