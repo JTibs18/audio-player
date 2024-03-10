@@ -5,25 +5,30 @@ interface AudioControllerProps {
     waveSurfer: any; 
     waveFormPlayPause: () => void; 
     waveFormStop: () => void; 
+    waveSurferRegions: any; 
 };
 
-const AudioController = ({waveSurfer, waveFormPlayPause, waveFormStop}: AudioControllerProps) =>{
+const AudioController = ({ waveSurfer, waveFormPlayPause, waveFormStop, waveSurferRegions }: AudioControllerProps) =>{
     const [isPlaying, setIsPlaying] = useState(false); 
 
     const togglePlay = () => {
         setIsPlaying(!isPlaying); 
         waveFormPlayPause();
-    }; 
+    };
 
     useEffect (() => {
         if (waveSurfer){
             waveSurfer.on('finish', () => {
                 setIsPlaying(false);
             });
-        }
+        };
     }, [waveSurfer]);
 
     const stopPlay = () => {
+        while(waveSurferRegions.regions.length){
+            waveSurferRegions.regions[0].remove(); 
+        };
+
         setIsPlaying(false); 
         waveFormStop(); 
     };
