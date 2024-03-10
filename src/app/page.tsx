@@ -7,15 +7,13 @@ import WaveSurferComponent from "@components/WaveSurferComponent";
 const Home = () => {
     const [audioSrc, setAudioSrc] = useState<string>('');
   
-    const handleFileSelected = (fileUrl: string) => {
-        setAudioSrc(fileUrl);
-    };
+    const handleFileSelected = (fileUrl: string) => setAudioSrc(fileUrl);
 
     return (
         <section>
             <h1> Jess Audio Player </h1>
             <FileInput onFileSelected={handleFileSelected} />
-            <WaveSurferComponent audioUrl={audioSrc} />
+            {audioSrc && <WaveSurferComponent audioUrl={audioSrc}/>}
         </section>
     );
 };
