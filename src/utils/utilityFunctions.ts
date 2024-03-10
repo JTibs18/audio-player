@@ -64,4 +64,51 @@ export function getWavBytes(buffer: ArrayBuffer, options: any) {
     writeUint32(dataSize)            // Subchunk2Size
   
     return new Uint8Array(buffer)
-  };
+};
+
+export function convertAudioBufferToBlob(audioBuffer: AudioBuffer): Blob {
+    const [left, right] = [audioBuffer.getChannelData(0), audioBuffer.getChannelData(1)];
+
+    const interleaved = new Float32Array(left.length + right.length);
+
+    for (let src=0, dst=0; src < left.length; src++, dst+=2) {
+        interleaved[dst] =   left[src];
+        interleaved[dst+1] = right[src];
+    };
+
+    const wavBytes = getWavBytes(interleaved.buffer, {
+        isFloat: true,       // floating point or 16-bit integer
+        numChannels: 2,
+        sampleRate: audioBuffer.sampleRate,
+    });
+
+    return new Blob([wavBytes], { type: 'audio/wav' });
+};
+
+// with help from https://github.com/katspaugh/wavesurfer.js/issues/419 
+export function createNewAudioBuffer(originalAudioBuffer: AudioBuffer, start: number, end: number) {
+    const sampleLength = Math.floor((end - start) * originalAudioBuffer.sampleRate);
+   
+    var offlineAudioContext = new OfflineAudioContext(1, 2, originalAudioBuffer.sampleRate);
+    var emptySegmentBuffer = offlineAudioContext.createBuffer(originalAudioBuffer.numberOfChannels, sampleLength, originalAudioBuffer.sampleRate);
+    var newAudioBuffer = offlineAudioContext.createBuffer(originalAudioBuffer.numberOfChannels, (start === 0 ? (originalAudioBuffer.length - emptySegmentBuffer.length) : originalAudioBuffer.length), originalAudioBuffer.sampleRate);
+   
+    for (let channel = 0; channel < originalAudioBuffer.numberOfChannels; channel++) {
+       var newChannelData = newAudioBuffer.getChannelData(channel);
+       var emptySegmentData = emptySegmentBuffer.getChannelData(channel);
+       var originalChannelData = originalAudioBuffer.getChannelData(channel);
+   
+       var beforeData = originalChannelData.subarray(0, start * originalAudioBuffer.sampleRate);
+       var afterData = originalChannelData.subarray(Math.floor(end * originalAudioBuffer.sampleRate), (originalAudioBuffer.length * originalAudioBuffer.sampleRate));
+   
+       if (start > 0) {
+         newChannelData.set(beforeData);
+         newChannelData.set(emptySegmentData, (start * newAudioBuffer.sampleRate));
+         newChannelData.set(afterData, (start * newAudioBuffer.sampleRate));
+       } else {
+         newChannelData.set(afterData);
+       };
+    };
+   
+    return newAudioBuffer;
+};
